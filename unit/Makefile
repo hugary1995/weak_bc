@@ -1,13 +1,13 @@
 # CXX = g++
 CXXFLAGS = -Wall -g -I ../include -I include
-MPICC = g++
+CXX = g++
 
-src = $(wildcard ../src/*.C) $(wildcard src/*.C)
+src := $(wildcard ../src/*.C) $(wildcard src/*.C)
 src := $(filter-out ../src/main.C, $(src))
-obj = $(src:.C=.o)
+obj := $(src:.C=.o)
 
 run_tests: $(obj)
-	$(MPICC) -o $@ $^
+	$(CXX) -o $@ $^
 
 .PHONY: clean
 

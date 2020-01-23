@@ -1,15 +1,24 @@
-# CXX = g++
-CXXFLAGS = -Wall -g -I include
-MPICC = mpicc
+BUILD_DIR = build
 
-src = $(wildcard src/*.C)
-obj = $(src:.C=.o)
+CXXFLAGS = -Wall -g -I include -I eigen -I fparser
+CXX = g++
+
+src := $(wildcard src/**/*.C) $(wildcard fparser/*.C)
+obj := $(src:.C=.o)
+
+build: prepare
+	echo "done"
+
+prepare:
+	rm -rf $(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)/src
+	mkdir -p $(BUILD_DIR)/include
+	cp $(src) $(BUILD_DIR)/.
 
 run: $(obj)
-	$(MPICC) -o $@ $^
-
-.PHONY: clean
+	$(CXX) -o $@ $^
 
 clean:
-	rm -f src/*.o
+	rm -f src/**/*.o
+	rm -f fparser/**/*.o
 	rm -f run

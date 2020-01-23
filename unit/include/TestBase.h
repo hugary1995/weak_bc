@@ -1,22 +1,22 @@
+#pragma once
+
 #include <iostream>
+#include <vector>
+
+// forward declaration
+class TestBase;
 
 class TestBase
 {
 public:
-  TestBase() { name = ""; }
-  TestBase(std::string n) { name = n; }
-  std::string name;
+  TestBase() : className(""), testName("") {}
+  TestBase(std::string c, std::string n) : className(c), testName(n) {}
+  virtual ~TestBase() {}
+  size_t nameLength() { return className.length() + testName.length(); }
   virtual bool run() = 0;
+  virtual void print() {}
+
+  std::string className;
+  std::string testName;
+  bool printTest = false;
 };
-
-#define TEST(name, code)                                                                           \
-  class name : public TestBase                                                                     \
-  {                                                                                                \
-  public:                                                                                          \
-    name() : TestBase(#name) {}                                                                    \
-    virtual bool run() override { code }                                                           \
-  };
-
-#define REGISTER_TEST(name)                                                                        \
-  TestBase * _name = new name();                                                                   \
-  tests.push_back(_name);
