@@ -2,7 +2,6 @@
 
 FEProblem::~FEProblem()
 {
-  delete _mesh;
   for (auto & k : _kernels)
     delete k;
   for (auto & m : _material_property_warehouse)
@@ -59,6 +58,13 @@ FEProblem::computeHessian()
 }
 
 void
+FEProblem::enforceBCs()
+{
+  for (auto const & b : _nodal_bcs)
+    b->enforce();
+}
+
+void
 FEProblem::init()
 {
   size_t nNodes = _mesh->nodes().size();
@@ -96,6 +102,7 @@ FEProblem::addMaterialProperty(std::string name, MaterialProperty * prop)
 
   std::pair<std::string, MaterialProperty *> tmp(name, prop);
   _material_property_warehouse.push_back(tmp);
+  std::cout << "Registered Material '" << name << "'" << std::endl;
 }
 
 MaterialProperty *

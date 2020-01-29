@@ -1,22 +1,35 @@
 BUILD_DIR = build
 
-CXXFLAGS = -Wall -g -I include -I eigen -I fparser
+CXXFLAGS = -Wall -g -I $(BUILD_DIR)/include -I eigen -I fparser
 CXX = g++
 
-src := $(wildcard src/**/*.C) $(wildcard fparser/*.C)
-obj := $(src:.C=.o)
+src := $(wildcard src/**/*.C)
+dep := $(wildcard include/**/*.h)
+src_fparser := $(wildcard fparser/*.C)
+obj_fparser := $(src_fparser:.C=.o)
+src_build := $(wildcard $(BUILD_DIR)/src/*.C)
+obj_build := $(src_build:.C=.o)
 
-build: prepare
-	echo "done"
+.PHONY: default prebuild build postbuild clean
 
-prepare:
+default:
+	make prebuild
+	make build
+	make postbuild
+
+prebuild:
 	rm -rf $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)/src
 	mkdir -p $(BUILD_DIR)/include
-	cp $(src) $(BUILD_DIR)/.
+	cp $(src) $(BUILD_DIR)/src/.
+	cp $(dep) $(BUILD_DIR)/include/.
 
-run: $(obj)
-	$(CXX) -o $@ $^
+build: $(obj_build) $(obj_fparser)
+	$(CXX) -o run $(CXXFLAGS) $^
+
+postbuild:
+	rm -f $(BUILD_DIR)/src/*.C
+	rm -f $(BUILD_DIR)/include/*.h
 
 clean:
 	rm -f src/**/*.o

@@ -33,7 +33,7 @@ MaterialProperty::reinitCoupledValue(std::string var)
   const Eigen::VectorXd solution = _problem->solution();
   for (_i = 0; _i < _current_nodes.size(); _i++)
   {
-    size_t dof = _problem->globalDoF(_current_nodes[_i]->id(), var);
+    size_t dof = _problem->globalDoF(_current_nodes[_i], var);
     double dof_value = solution(dof);
     for (_qp = 0; _qp < _mapped_q_points.size(); _qp++)
       v[_qp] += _test[_i][_qp] * dof_value;
@@ -48,7 +48,7 @@ MaterialProperty::reinitCoupledGradient(std::string var)
   const Eigen::VectorXd solution = _problem->solution();
   for (_i = 0; _i < _current_nodes.size(); _i++)
   {
-    size_t dof = _problem->globalDoF(_current_nodes[_i]->id(), var);
+    size_t dof = _problem->globalDoF(_current_nodes[_i], var);
     double dof_value = solution(dof);
     for (_qp = 0; _qp < _mapped_q_points.size(); _qp++)
       v[_qp] += _grad_test[_i][_qp] * dof_value;

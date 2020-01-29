@@ -16,9 +16,13 @@ public:
   }
   const std::vector<const Node *> & nodes() const { return _nodes; }
   const std::vector<const Element *> & elems() const { return _elems; }
-  const std::map<std::string, std::vector<const Node *>> & boundaries() const
+  const std::map<std::string, std::vector<const Node *>> & nodeSets() const { return _node_sets; }
+  const std::vector<const Node *> * getNodeSet(std::string name) const
   {
-    return _boundaries;
+    for (auto const & s : _node_sets)
+      if (s.first == name)
+        return &s.second;
+    return nullptr;
   }
   void print() const
   {
@@ -30,5 +34,5 @@ public:
 protected:
   std::vector<const Node *> _nodes;
   std::vector<const Element *> _elems;
-  std::map<std::string, std::vector<const Node *>> _boundaries;
+  std::map<std::string, std::vector<const Node *>> _node_sets;
 };

@@ -37,7 +37,7 @@ KernelBase::reinitCoupledValue(std::string var)
   const Eigen::VectorXd solution = _problem->solution();
   for (_i = 0; _i < _current_nodes.size(); _i++)
   {
-    size_t dof = _problem->globalDoF(_current_nodes[_i]->id(), var);
+    size_t dof = _problem->globalDoF(_current_nodes[_i], var);
     double dof_value = solution(dof);
     for (_qp = 0; _qp < _q_points.size(); _qp++)
       v[_qp] += _test[_i][_qp] * dof_value;
@@ -52,7 +52,7 @@ KernelBase::reinitCoupledGradient(std::string var)
   const Eigen::VectorXd solution = _problem->solution();
   for (_i = 0; _i < _current_nodes.size(); _i++)
   {
-    size_t dof = _problem->globalDoF(_current_nodes[_i]->id(), var);
+    size_t dof = _problem->globalDoF(_current_nodes[_i], var);
     double dof_value = solution(dof);
     for (_qp = 0; _qp < _q_points.size(); _qp++)
       v[_qp] += _grad_test[_i][_qp] * dof_value;
@@ -66,7 +66,7 @@ KernelBase::computeGradient()
   for (_qp = 0; _qp < _q_points.size(); _qp++)
     for (_i = 0; _i < _current_nodes.size(); _i++)
     {
-      size_t dof_i = _problem->globalDoF(_current_nodes[_i]->id(), _variable);
+      size_t dof_i = _problem->globalDoF(_current_nodes[_i], _variable);
       (*_gradient)(dof_i) += _JxW[_qp] * computeQpGradient();
     }
 }
@@ -78,8 +78,8 @@ KernelBase::computeHessian()
     for (_i = 0; _i < _current_nodes.size(); _i++)
       for (_j = 0; _j < _current_nodes.size(); _j++)
       {
-        size_t dof_i = _problem->globalDoF(_current_nodes[_i]->id(), _variable);
-        size_t dof_j = _problem->globalDoF(_current_nodes[_j]->id(), _variable);
+        size_t dof_i = _problem->globalDoF(_current_nodes[_i], _variable);
+        size_t dof_j = _problem->globalDoF(_current_nodes[_j], _variable);
         (*_hessian)(dof_i, dof_j) += _JxW[_qp] * computeQpHessian();
       }
 }

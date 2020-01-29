@@ -20,6 +20,6 @@ Mesh1DBAR2::Mesh1DBAR2(double xmin, double xmax, size_t nx)
   }
 
   // boundaries
-  _boundaries["left"] = {_nodes[0]};
-  _boundaries["right"] = {_nodes[nx]};
+  _node_sets["left"] = {_nodes[0]};
+  _node_sets["right"] = {_nodes[nx]};
 }
